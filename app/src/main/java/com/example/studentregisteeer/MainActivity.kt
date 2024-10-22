@@ -21,6 +21,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var viewModel: StudentViewModel
     private lateinit var rvStudents: RecyclerView
     private lateinit var adapter: StudentRecyclerViewAdapter
+    private lateinit var selecteStudent: Student
+    private var isStudentSelected = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,11 +45,18 @@ class MainActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this, factory)[StudentViewModel::class.java]
 
         btCreate.setOnClickListener {
-            createStudent()
+            if(isStudentSelected){
+                updateStudent()
+            } else {
+                createStudent()
+            }
             clearInput()
         }
 
         btClear.setOnClickListener{
+            if(isStudentSelected){
+                deleteStudent()
+            }
             clearInput()
         }
 
@@ -56,10 +65,22 @@ class MainActivity : AppCompatActivity() {
 
     private fun initRecyclerView(){
         rvStudents.layoutManager = LinearLayoutManager(this)
-        adapter = StudentRecyclerViewAdapter()
+        adapter = StudentRecyclerViewAdapter { selectedStudent: Student ->
+            listItemClicked(selectedStudent)
+        }
         rvStudents.adapter = adapter
 
         displayStudents()
+    }
+
+    private fun listItemClicked(student: Student) {
+        selecteStudent = student
+        btCreate.text = "Update"
+        btClear.text = "Delete"
+        isStudentSelected = true
+
+        etName.setText(student.name)
+        etEmail.setText(student.email)
     }
 
     private fun displayStudents(){
@@ -75,6 +96,26 @@ class MainActivity : AppCompatActivity() {
             etName.text.toString(),
             etEmail.text.toString()
         ))
+    }
+
+    private fun updateStudent(){
+        viewModel.updateStudent(Student(
+            selecteStudent.id,
+            etName.text.toString(),
+            etEmail.text.toString()
+        ))
+
+        btCreate.text = "Create"
+        btClear.text = "Clear"
+        isStudentSelected = false
+    }
+
+    private fun deleteStudent(){
+        viewModel.deleteStudent(selecteStudent)
+
+        btCreate.text = "Create"
+        btClear.text = "Clear"
+        isStudentSelected = false
     }
 
     private fun clearInput(){

@@ -7,7 +7,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.studentregisteeer.db.Student
 
-class StudentRecyclerViewAdapter() : RecyclerView.Adapter<StudentViewHolder>() {
+class StudentRecyclerViewAdapter(private val clickListener: (Student) -> Unit) : RecyclerView.Adapter<StudentViewHolder>() {
     private val studentList = ArrayList<Student>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StudentViewHolder {
@@ -21,7 +21,7 @@ class StudentRecyclerViewAdapter() : RecyclerView.Adapter<StudentViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: StudentViewHolder, position: Int) {
-        holder.bind(studentList[position])
+        holder.bind(studentList[position], clickListener)
     }
 
     fun setList(students: List<Student>){
@@ -31,11 +31,15 @@ class StudentRecyclerViewAdapter() : RecyclerView.Adapter<StudentViewHolder>() {
 }
 
 class StudentViewHolder(private val view: View) : RecyclerView.ViewHolder(view){
-    fun bind(student: Student){
+    fun bind(student: Student, clickListener: (Student) -> Unit){
         val tvName = view.findViewById<TextView>(R.id.tvName)
         val tvEmail = view.findViewById<TextView>(R.id.tvEmail)
 
         tvName.text = student.name
         tvEmail.text = student.email
+
+        view.setOnClickListener {
+            clickListener(student)
+        }
     }
 }
