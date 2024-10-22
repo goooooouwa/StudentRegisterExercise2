@@ -34,6 +34,9 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+    buildFeatures {
+        viewBinding = true
+    }
 }
 
 dependencies {
@@ -41,6 +44,7 @@ dependencies {
     val ktx_version = "2.6.1"
 
     // room
+    implementation("androidx.room:room-ktx:$room_version")
     implementation("androidx.room:room-runtime:$room_version")
     annotationProcessor("androidx.room:room-compiler:$room_version")
 
@@ -48,7 +52,6 @@ dependencies {
     kapt("androidx.room:room-compiler:$room_version")
 
     // lifecycle kotlin coroutines extensions
-    implementation("androidx.core:core-ktx:$ktx_version")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$ktx_version")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:$ktx_version")
 
