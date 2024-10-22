@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Student Registeeer</string>
+    <string name="create">Create</string>
+    <string name="clear">Clear</string>
+    <string name="student_s_email">Student\'s Email</string>
+    <string name="student_s_name">Student\'s Name</string>
 </resources>
